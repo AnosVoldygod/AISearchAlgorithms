@@ -1,9 +1,6 @@
 import sys
 import csv
-from operator import index
 from collections import deque
-from turtledemo.penrose import start
-
 
 def bfs(graph, start_state, goal_state):
 
@@ -39,7 +36,6 @@ def bfs(graph, start_state, goal_state):
 
     # Return None if no path exists
     return None
-
 def dfs(graph, start_state, goal_state):
 
     # A way to track the visited nodes to avoid repeats
@@ -78,21 +74,14 @@ def dfs(graph, start_state, goal_state):
 
     return dfs_loop(start_state, goal_state, graph)
 
-
-def greedy_bfs(graph, start_state, goal_state):
-
-
-
 def graph_search():
     """
-    You are free to implement this however you like, but you will most likely need to input the graph data structure G,
-    the heuristic function h, the start state s, the goal state t, and the search strategy X
+    You are free to implement this however you like but you will most likely need to input the graph data structure G, the heuristic function h, the start state s, the goal state t, and the search strategy X  
     """
-    # ---- YOUR CODE HERE ----
 
     match search_strategy:
         case "B":
-            return bfs(graph,start_state,goal_state)
+            return bfs(graph, start_state, goal_state)
         case "D":
             return dfs(graph, start_state, goal_state)
         case "C":
@@ -100,11 +89,9 @@ def graph_search():
         case "D":
             return None
 
+
 # ---- INCLUDE ANY OTHER CODE THAT YOU NEED HERE ----
 
-#This code is to collect user input
-def user_instruction():
-    print("Welcome to the ITO5047 Thing, please select from the following options")
 
 if __name__ == "__main__":
 
@@ -132,12 +119,10 @@ if __name__ == "__main__":
             heuristic.append(heuristic_row)
 
     # once we have the goal we can create the heuristic function using the matrix
-    heuristic_func = lambda n: heuristic[n][goal_state]
-
+    heuristic_func = lambda n: heuristic[n][goal_state]        
+            
     # find and print the path. The vertices are numbered as they appear in the original graph. Add whatever inputs you need to your graph search function
-
     path = graph_search()
-
     if path is not None:
         path = str([state + 1 for state in path])
     print(path)
