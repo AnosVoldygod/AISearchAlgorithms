@@ -81,20 +81,17 @@ def greedy_bfs(start_state, goal_state, graph, heuristic):
 
     node_stack = deque([[start_state]])
 
-    current_node = 0
+    current_node = None
 
     #The path starts
     path = node_stack.popleft()
-    print(path)
 
     while current_node != goal_state:
-
 
         # Define the current node
         current_node = path[-1]
 
         heuristic_dictionary = {}
-
         # Mark current node as visited on the list
         visited_nodes[current_node] = True
         # Makes sure loop ends at goal
@@ -103,6 +100,7 @@ def greedy_bfs(start_state, goal_state, graph, heuristic):
 
         for neighbor_nodes, node_weight in enumerate(graph[current_node]):
             if node_weight is not None and not visited_nodes[neighbor_nodes]:
+                print(neighbor_nodes)
                 heuristic_dictionary[neighbor_nodes] = heuristic[neighbor_nodes][goal_state]
                 # Mark explored neighbor node as visited on the list
 
