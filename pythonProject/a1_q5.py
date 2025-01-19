@@ -74,6 +74,58 @@ def dfs(graph, start_state, goal_state):
 
     return dfs_loop(start_state, goal_state, graph)
 
+def greedy_bfs(start_state, goal_state, graph, heuristic):
+
+    # A way to track the visited nodes to avoid repeats
+    visited_nodes = [False] * len(graph)
+
+    node_stack = deque([[start_state]])
+
+    current_node = 0
+
+    #The path starts
+    path = node_stack.popleft()
+    print(path)
+
+    while current_node != goal_state:
+
+
+        # Define the current node
+        current_node = path[-1]
+
+        heuristic_dictionary = {}
+
+        # Mark current node as visited on the list
+        visited_nodes[current_node] = True
+        # Makes sure loop ends at goal
+        if current_node == goal_state:
+            return path
+
+        for neighbor_nodes, node_weight in enumerate(graph[current_node]):
+            if node_weight is not None and not visited_nodes[neighbor_nodes]:
+                heuristic_dictionary[neighbor_nodes] = heuristic[neighbor_nodes][goal_state]
+                # Mark explored neighbor node as visited on the list
+
+        print(heuristic_dictionary)
+
+        #Current node is the node with the lowest heuristic value
+        current_node = min(heuristic_dictionary,key=heuristic_dictionary.get)
+        #Add that node to the visited list
+        visited_nodes[current_node] = True
+        #Remove that node from the open list
+        del heuristic_dictionary[current_node]
+        print(current_node+1)
+
+        new_path = list(path)
+        new_path.append(current_node)
+        node_stack.append(new_path)
+        #print(new_path)
+        #next node needs to be added here as loop will end if node is goal node.
+        path = node_stack.popleft()
+
+    return path
+
+
 def graph_search():
     """
     You are free to implement this however you like but you will most likely need to input the graph data structure G, the heuristic function h, the start state s, the goal state t, and the search strategy X  
@@ -84,8 +136,8 @@ def graph_search():
             return bfs(graph, start_state, goal_state)
         case "D":
             return dfs(graph, start_state, goal_state)
-        case "C":
-            return None
+        case "G":
+            return greedy_bfs(start_state, goal_state, graph, heuristic)
         case "D":
             return None
 
