@@ -100,11 +100,8 @@ def greedy_bfs(start_state, goal_state, graph, heuristic):
 
         for neighbor_nodes, node_weight in enumerate(graph[current_node]):
             if node_weight is not None and not visited_nodes[neighbor_nodes]:
-                print(neighbor_nodes)
                 heuristic_dictionary[neighbor_nodes] = heuristic[neighbor_nodes][goal_state]
                 # Mark explored neighbor node as visited on the list
-
-        print(heuristic_dictionary)
 
         #Current node is the node with the lowest heuristic value
         current_node = min(heuristic_dictionary,key=heuristic_dictionary.get)
@@ -112,17 +109,18 @@ def greedy_bfs(start_state, goal_state, graph, heuristic):
         visited_nodes[current_node] = True
         #Remove that node from the open list
         del heuristic_dictionary[current_node]
-        print(current_node+1)
+
 
         new_path = list(path)
         new_path.append(current_node)
         node_stack.append(new_path)
-        #print(new_path)
         #next node needs to be added here as loop will end if node is goal node.
         path = node_stack.popleft()
 
     return path
 
+def a_star(start_state, goal_state, graph, heuristic):
+    return None
 
 def graph_search():
     """
@@ -137,7 +135,7 @@ def graph_search():
         case "G":
             return greedy_bfs(start_state, goal_state, graph, heuristic)
         case "D":
-            return None
+            return a_star(start_state, goal_state, graph, heuristic)
 
 
 # ---- INCLUDE ANY OTHER CODE THAT YOU NEED HERE ----
