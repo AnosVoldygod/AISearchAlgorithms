@@ -87,11 +87,56 @@ def greedy_bfs(graph, start_state, goal_state, heuristic):
     return None
 
 def a_star(start_state, goal_state, graph, heuristic):
+    priority_queue = [[start_state]]  # Priority queue managed as a list+
+    visited_nodes = [False] * len(graph)
+
+    while priority_queue:
+        # Find and remove the path with the lowest heuristic value
+        min_index = 0
+        for i in range(1, len(priority_queue)):
+            #Current path is required as current path may not be optimal path
+            #Sets the current path to the first path in the queue by default
+            current_path = priority_queue[i]
+            #Sets the best path as the one determined by min_index which has been checked by heuristics
+            best_path = priority_queue[min_index]
+
+            #Now to calculate the g value
+            g_value_current_path = 0
+            g_value_best_path = 0
+            path_loop = len(current_path) - 1
+
+            while path_loop > 0:
+                g_value_current_path += graph[current_path[path_loop-1]][current_path[path_loop]]
+                path_loop -= 1
+
+            path_loop = len(best_path) - 1
+            while path_loop > 0:
+                g_value_best_path += graph[current_path[path_loop-1]][current_path[path_loop]]
+                path_loop -= 1
+
+            if heuristic[current_path[-1]][goal_state] + g_value_current_path < heuristic[best_path[-1]][goal_state] + g_value_best_path:
+                min_index = i
+
+        path = priority_queue.pop(min_index)
+        current_node = path[-1]
+
+        if current_node == goal_state:
+            return path
+
+        if not visited_nodes[current_node]:
+            visited_nodes[current_node] = True
+
+            for neighbor_nodes, node_weight in enumerate(graph[current_node]):
+                if node_weight is not None and not visited_nodes[neighbor_nodes]:
+                    new_path = list(path)
+                    new_path.append(neighbor_nodes)
+                    priority_queue.append(new_path)
+
     return None
 
 def graph_search():
     """
-    You are free to implement this however you like but you will most likely need to input the graph data structure G, the heuristic function h, the start state s, the goal state t, and the search strategy X  
+    You are free to implement this however you like but you will most likely need to input the graph data structure G, the heuristic function h, the start state s, the goal state t, and the search strategy X
     """
 
     match search_strategy:
@@ -101,7 +146,7 @@ def graph_search():
             return dfs(graph, start_state, goal_state)
         case "G":
             return greedy_bfs(graph, start_state, goal_state, heuristic)
-        case "D":
+        case "A":
             return a_star(start_state, goal_state, graph, heuristic)
 
 
