@@ -1,3 +1,4 @@
+import heapq
 import sys
 import csv
 from collections import deque
@@ -55,50 +56,35 @@ def dfs(graph, start_state, goal_state):
     # If no path is found, return None
     return None
 
-def greedy_bfs(start_state, goal_state, graph, heuristic):
-
-    # A way to track the visited nodes to avoid repeats
+def greedy_bfs(graph, start_state, goal_state, heuristic):
+    priority_queue = [[start_state]]  # Priority queue managed as a list
     visited_nodes = [False] * len(graph)
 
-    node_stack = deque([[start_state]])
+    while priority_queue:
+        # Find and remove the path with the lowest heuristic value
+        min_index = 0
+        for i in range(1, len(priority_queue)):
+            current_path = priority_queue[i]
+            best_path = priority_queue[min_index]
+            if heuristic[current_path[-1]][goal_state] < heuristic[best_path[-1]][goal_state]:
+                min_index = i
 
-    current_node = None
-
-    #The path starts
-    path = node_stack.popleft()
-
-    while current_node != goal_state:
-
-        # Define the current node
+        path = priority_queue.pop(min_index)
         current_node = path[-1]
 
-        heuristic_dictionary = {}
-        # Mark current node as visited on the list
-        visited_nodes[current_node] = True
-        # Makes sure loop ends at goal
         if current_node == goal_state:
             return path
 
-        for neighbor_nodes, node_weight in enumerate(graph[current_node]):
-            if node_weight is not None and not visited_nodes[neighbor_nodes]:
-                heuristic_dictionary[neighbor_nodes] = heuristic[neighbor_nodes][goal_state]
-                # Mark explored neighbor node as visited on the list
+        if not visited_nodes[current_node]:
+            visited_nodes[current_node] = True
 
-        #Current node is the node with the lowest heuristic value
-        current_node = min(heuristic_dictionary,key=heuristic_dictionary.get)
-        #Add that node to the visited list
-        visited_nodes[current_node] = True
-        #Remove that node from the open list
-        del heuristic_dictionary[current_node]
+            for neighbor_nodes, node_weight in enumerate(graph[current_node]):
+                if node_weight is not None and not visited_nodes[neighbor_nodes]:
+                    new_path = list(path)
+                    new_path.append(neighbor_nodes)
+                    priority_queue.append(new_path)
 
-
-        new_path = list(path)
-        new_path.append(current_node)
-        node_stack.append(new_path)
-        #next node needs to be added here as loop will end if node is goal node.
-        path = node_stack.popleft()
-
-    return path
+    return None
 
 def a_star(start_state, goal_state, graph, heuristic):
     return None
@@ -114,7 +100,7 @@ def graph_search():
         case "D":
             return dfs(graph, start_state, goal_state)
         case "G":
-            return greedy_bfs(start_state, goal_state, graph, heuristic)
+            return greedy_bfs(graph, start_state, goal_state, heuristic)
         case "D":
             return a_star(start_state, goal_state, graph, heuristic)
 
