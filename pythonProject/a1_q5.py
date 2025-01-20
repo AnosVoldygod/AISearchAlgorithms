@@ -97,6 +97,7 @@ def a_star(start_state, goal_state, graph, heuristic):
             #Current path is required as current path may not be optimal path
             #Sets the current path to the first path in the queue by default
             current_path = priority_queue[i]
+
             #Sets the best path as the one determined by min_index which has been checked by heuristics
             best_path = priority_queue[min_index]
 
@@ -111,7 +112,7 @@ def a_star(start_state, goal_state, graph, heuristic):
 
             path_loop = len(best_path) - 1
             while path_loop > 0:
-                g_value_best_path += graph[current_path[path_loop-1]][current_path[path_loop]]
+                g_value_best_path += graph[best_path[path_loop-1]][best_path[path_loop]]
                 path_loop -= 1
 
             if heuristic[current_path[-1]][goal_state] + g_value_current_path < heuristic[best_path[-1]][goal_state] + g_value_best_path:
