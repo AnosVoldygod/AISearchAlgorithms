@@ -3,76 +3,57 @@ import csv
 from collections import deque
 
 def bfs(graph, start_state, goal_state):
-
-    # Starting node to the node stack
-
     node_stack = deque([[start_state]])
-
-    # A way to track the visited nodes to avoid repeats
     visited_nodes = [False] * len(graph)
 
-    current_node = 0
-
-    while current_node != goal_state:
-        #Add first node to the path and remove it from the stack
+    while node_stack:
         path = node_stack.popleft()
-        #Define the current node
         current_node = path[-1]
-        #Check if the goal node has been reached
+
         if current_node == goal_state:
             return path
 
-        #Mark current node as visited on the list
-        visited_nodes[current_node] = True
+        if not visited_nodes[current_node]:
+            visited_nodes[current_node] = True
 
-        for neighbor_nodes, node_weight in enumerate(graph[current_node]):
-            if node_weight is not None and not visited_nodes[neighbor_nodes]:
-                # Mark explored neighbor node as visited on the list
-                visited_nodes[neighbor_nodes] = True
-                new_path = list(path)
-                new_path.append(neighbor_nodes)
-                node_stack.append(new_path)
+            for neighbor_nodes, node_weight in enumerate(graph[current_node]):
+                if node_weight is not None and not visited_nodes[neighbor_nodes]:
+                    new_path = list(path)
+                    new_path.append(neighbor_nodes)
+                    node_stack.append(new_path)
 
-
-    # Return None if no path exists
     return None
+
 def dfs(graph, start_state, goal_state):
 
     # A way to track the visited nodes to avoid repeats
     visited_nodes = [False] * len(graph)
 
-    node_stack = deque([[start_state]])
+    # Stack for DFS (LIFO)
+    node_stack = [[start_state]]
 
-    def dfs_loop(current_node, goal_node, graph_thing):
-
-        path = node_stack.popleft()
-        # Define the current node
+    while node_stack:
+        # Pop the last path (DFS uses LIFO)
+        path = node_stack.pop()
         current_node = path[-1]
 
-        # Makes sure loop ends at goal
-        if current_node == goal_node:
+        # Check if the goal node is reached
+        if current_node == goal_state:
             return path
 
-        # Mark the visited node as true because already confirmed not false
-        visited_nodes[current_node] = True
+        # Mark the current node as visited
+        if not visited_nodes[current_node]:
+            visited_nodes[current_node] = True
 
-        for neighbor_nodes, neighbor_weights in enumerate(graph_thing[current_node]):
-            if neighbor_weights is not None and not visited_nodes[neighbor_nodes]:
-                # Mark the first visited neighbor node as true
-                visited_nodes[neighbor_nodes] = True
-                new_path = list(path)
-                new_path.append(neighbor_nodes)
-                node_stack.append(new_path)
+            # Add neighbors to the stack
+            for neighbor_node, weight in enumerate(graph[current_node]):
+                if weight is not None and not visited_nodes[neighbor_node]:
+                    new_path = list(path)  # Copy the current path
+                    new_path.append(neighbor_node)
+                    node_stack.append(new_path)
 
-                # Make sure results are returned
-                result = dfs_loop(neighbor_nodes, goal_node, graph_thing)
-                if result is not None:
-                    return result
-
-        # If no path is found, return None
-        return None
-
-    return dfs_loop(start_state, goal_state, graph)
+    # If no path is found, return None
+    return None
 
 def greedy_bfs(start_state, goal_state, graph, heuristic):
 
