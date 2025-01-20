@@ -106,16 +106,24 @@ def a_star(start_state, goal_state, graph, heuristic):
             g_value_best_path = 0
             path_loop = len(current_path) - 1
 
+            #loop through path to calculate the g value for current path
             while path_loop > 0:
                 g_value_current_path += graph[current_path[path_loop-1]][current_path[path_loop]]
                 path_loop -= 1
 
+            # loop through path to calculate the g value for best path
             path_loop = len(best_path) - 1
             while path_loop > 0:
                 g_value_best_path += graph[best_path[path_loop-1]][best_path[path_loop]]
                 path_loop -= 1
 
-            if heuristic[current_path[-1]][goal_state] + g_value_current_path < heuristic[best_path[-1]][goal_state] + g_value_best_path:
+            #f value f(i) = g(i) + h(i)
+            
+            f_best_path = heuristic[best_path[-1]][goal_state] + g_value_best_path
+
+            f_current_path = heuristic[current_path[-1]][goal_state] + g_value_current_path
+
+            if f_current_path < f_best_path:
                 min_index = i
 
         path = priority_queue.pop(min_index)
