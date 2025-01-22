@@ -118,7 +118,7 @@ def a_star(start_state, goal_state, graph, heuristic):
                 path_loop -= 1
 
             #f value f(i) = g(i) + h(i)
-            
+
             f_best_path = heuristic[best_path[-1]][goal_state] + g_value_best_path
 
             f_current_path = heuristic[current_path[-1]][goal_state] + g_value_current_path
