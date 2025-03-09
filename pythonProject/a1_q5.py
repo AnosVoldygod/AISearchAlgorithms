@@ -138,6 +138,7 @@ def a_star(start_state, goal_state, graph, heuristic):
             for neighbor_nodes, node_weight in enumerate(graph[current_node]):
                 if node_weight is not None and not visited_nodes[neighbor_nodes]:
                     new_path = list(path)
+
                     new_path.append(neighbor_nodes)
                     priority_queue.append(new_path)
 
